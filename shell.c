@@ -43,7 +43,7 @@ void prompt()
 int main(void)
 {
 	char cmd[100], command[100], *parameters[20];
-
+	char *envp[] = { (char *) "PATH=/bin", 0 };
 	while (1)
 	{
 		prompt();
@@ -54,7 +54,9 @@ int main(void)
 
 		else
 		{
-			execve(cmd, parameters, NULL);
+			strcpy(cmd, "/bin/");
+			strcat(cmd, command);
+			execve(cmd, parameters, envp);
 		}
 	if (strcmp(command, "exit") == 0)
 		break;

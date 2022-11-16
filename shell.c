@@ -1,8 +1,4 @@
-#include <stdio.h>
-#include <unistd.h>
-#include <string.h>
-#include <stdlib.h>
-#include <sys/wait.h>
+#include "main.h"
 
 /**
 *read_command - function that reads a command
@@ -75,15 +71,15 @@ int main(void)
 			strcpy(cmd, "/bin/");
 			strcat(cmd, command);
 			execve(cmd, parameters, envp);
+
+			 if (execve(cmd, parameters, envp) == -1)
+                	{
+                        	perror("not found");
+                	}
+
 		}
 		if (strcmp(command, "exit") == 0)
 			break;
-		if (execve(cmd, parameters, envp) == -1)
-		{
-			perror("not found:");
-		}
-
-
 	}
 	return (0);
 }

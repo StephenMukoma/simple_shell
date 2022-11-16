@@ -4,6 +4,13 @@
 #include <stdlib.h>
 #include <sys/wait.h>
 
+/**
+*read_command - function that reads a command
+*
+*@cmd: command to be read
+*
+*@par: pointer to command
+*/
 void read_command(char cmd[], char *par[])
 {
 	char line[1024];
@@ -13,6 +20,7 @@ void read_command(char cmd[], char *par[])
 	for (;;)
 	{
 		int c = fgetc(stdin);
+
 		line[count++] = (char)c;
 
 		if (c == '\n')
@@ -35,15 +43,25 @@ void read_command(char cmd[], char *par[])
 		par[i] = NULL;
 }
 
-void prompt()
+/**
+*prompt - function that asks for an input
+*
+*/
+void prompt(void)
 {
 	printf("($)");
 }
 
+/**
+*main - opeartes like shell
+*
+*Return: 0 (success)
+*/
 int main(void)
 {
 	char cmd[100], command[100], *parameters[20];
 	char *envp[] = { (char *) "PATH=/bin", 0 };
+
 	while (1)
 	{
 		prompt();
@@ -58,8 +76,14 @@ int main(void)
 			strcat(cmd, command);
 			execve(cmd, parameters, envp);
 		}
-	if (strcmp(command, "exit") == 0)
-		break;
+		if (strcmp(command, "exit") == 0)
+			break;
+		if (execve(cmd, parameters, envp) == -1)
+		{
+			perror("not found:");
+		}
+
+
 	}
 	return (0);
 }

@@ -55,6 +55,7 @@ void prompt(void)
 */
 int main(void)
 {
+	pid_t child_pid;
 	char cmd[100], command[100], *parameters[20];
 	char *envp[] = { (char *) "PATH=/bin", 0 };
 
@@ -63,23 +64,33 @@ int main(void)
 		prompt();
 		read_command(command, parameters);
 
-		if (fork() != 0)
-			wait(NULL);
+		child_pid = fork();
 
-		else
+		if (child_pid == -1)
+		{
+			perror("Error:");
+			return (1);
+		}
+		 if (strcmp(command, "exit") == 0)
+                        break;
+
+		if (child_pid == 0)
 		{
 			strcpy(cmd, "/bin/");
 			strcat(cmd, command);
 			execve(cmd, parameters, envp);
 
-			 if (execve(cmd, parameters, envp) == -1)
+			if (execve(cmd, parameters, envp) == -1)
                 	{
                         	perror("not found");
+				exit(1);
                 	}
 
 		}
-		if (strcmp(command, "exit") == 0)
-			break;
+		else
+		{
+			wait(NULL);
+		}
 	}
 	return (0);
 }

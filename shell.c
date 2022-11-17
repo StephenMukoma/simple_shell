@@ -35,8 +35,10 @@ void read_command(char cmd[], char *par[])
 	strcpy(cmd, array[0]);
 
 	for (j = 0; j < i; j++)
+	{
 		par[j] = array[j];
 		par[i] = NULL;
+	}
 }
 
 /**
@@ -58,6 +60,9 @@ int main(void)
 	pid_t child_pid;
 	char cmd[100], command[100], *parameters[20];
 	char *envp[] = { (char *) "PATH=/bin", 0 };
+	
+
+	write(1, "\033[1;1H\033[2J", 10); /*clears terminal window */
 
 	while (1)
 	{
